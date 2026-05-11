@@ -55,3 +55,47 @@ export async function getTrailsByRegionId(regionId: number): Promise<Trail[]> {
         regionId,
     );
 }
+
+export interface TrailFormData {
+    title: string;
+    slug: string;
+    description: string;
+    difficulty: string;
+    distance_km: number;
+    region_id: number;
+    created_at: string;
+}
+
+export function slugify(title: string): string {
+    return title
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+}
+
+export async function addTrail(data: TrailFormData): Promise<void> {
+    const db = getDB();
+
+    await db.run(
+        `
+    INSERT INTO trails (
+      title,
+      slug,
+      description,
+      difficulty,
+      distance_km,
+      region_id,
+        created_at
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    `,
+        data.title,
+        data.slug,
+        data.description,
+        data.difficulty,
+        data.distance_km,
+        data.region_id,
+        data.created_at,
+    );
+}

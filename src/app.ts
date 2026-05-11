@@ -19,6 +19,9 @@ app.set("view engine", "html");
 
 app.use(express.static(path.join(process.cwd(), "public")));
 app.use(logger);
+
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/", websiteRoutes);
 app.use("/admin", adminRoutes);
 
