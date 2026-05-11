@@ -140,3 +140,13 @@ export async function updateTrail(
 
     return result.changes !== 0;
 }
+
+export async function deleteTrail(id: number): Promise<boolean> {
+    const db = getDB();
+    const result = await db.run(
+    `DELETE FROM trails
+WHERE id = ?`,
+        id,
+    );
+    return result.changes !==0;
+}

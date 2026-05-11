@@ -1,5 +1,11 @@
 import type { Request, Response } from "express";
-import { addTrail, getAllTrails, getTrailById, slugify, updateTrail } from "../models/trailModel.ts"
+import { addTrail,
+    deleteTrail,
+    getAllTrails,
+    getTrailById,
+    slugify,
+    updateTrail
+} from "../models/trailModel.ts"
 import { formatDate} from "../utils/formatDate.ts";
 import sanitizeHtml from "sanitize-html";
 import { getAllRegions } from "../models/regionModel";
@@ -150,5 +156,22 @@ export async function saveEditedTrail(
         return;
     }
 
+    response.redirect("/admin");
+}
+
+export async function deleteExistingTrail(
+    request: Request<{ id: string }>,
+    response: Response,
+) {
+    const id = Number(request.params.id);
+    if (!Number.isInteger(id)) {
+        response.status(400).send("Invalid trail id");
+        return;
+    }
+    const wasDeleted = await deleteTrail(id);
+    if (!wasDeleted) {
+        response.status(404).send("Trail not found");
+        return;
+    }
     response.redirect("/admin");
 }
