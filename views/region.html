@@ -2,12 +2,16 @@
 {% from "macros/trailCard.html" import trailCard %}
 
 {% block content %}
-<h1>Trail Guide</h1>
+<h1>{{ region.name }}</h1>
+<p>{{ region.country }}</p>
+<h2>Trails in this region</h2>
 
-<p> Endecke wanderwege und ihre Region. </p>
 {% for trail in trails %}
 {{ trailCard(trail) }}
 {% else %}
-<p>Kein Trails gefunden.</p>
+<p>No trails found for this region.</p>
 {% endfor %}
+<p>
+    <a href="/regions">Back to all regions</a>
+</p>
 {% endblock content %}

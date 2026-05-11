@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Regions</h1>
+<p>Browse trail by region.</p>
+
+{% for region in regions %}
+<article>
+    <header>
+        <h2>{{ region.name }}</h2>
+        <p>{{ region.country }}</p>
+    </header>
+
+    <footer>
+        <a href="/regions/{{ region.slug }}">View trails</a>
+    </footer>
+</article>
+{% else %}
+<p>No regions found.</p>
+{% endfor %}
+{% endblock content %}
