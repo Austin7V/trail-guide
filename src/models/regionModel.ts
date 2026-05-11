@@ -21,7 +21,7 @@ export async function getRegionBySlug(slug: string): Promise<Region | undefined>
     const db = getDB();
     return db.get<Region>(
         `SELECT id, name, slug, country
-        FROM region
+        FROM regions
         WHERE slug = ?`,
         slug,
     );

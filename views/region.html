@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "macros/trailCard.html" import trailCard %}
+
+{% block content %}
+<h1>{{ region.name }}</h1>
+<p>{{ region.country }}</p>
+<h2>Trails in this region</h2>
+
+{% for trail in trails %}
+{{ trailCard(trail) }}
+{% else %}
+<p>No trails found for this region.</p>
+{% endfor %}
+<p>
+    <a href="/regions">Back to all regions</a>
+</p>
+{% endblock content %}
