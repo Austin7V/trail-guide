@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title | default("Trail Guide") }}</title>
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+</head>
+
+<body>
+    <header class="container">
+        <nav>
+            <ul>
+                <li><strong>Trail Guide</strong></li>
+            </ul>
+
+            <ul>
+                <li><a href="/">Trails</a></li>
+                <li><a href="/regions">Regions</a></li>
+                <li><a href="/admin">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <footer class="container">
+        <small> Trail Guide Neue Fische Backend Recap Project Sergey</small>
+    </footer>
+
+</body>
+</html>
