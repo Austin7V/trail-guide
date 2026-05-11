@@ -99,3 +99,44 @@ export async function addTrail(data: TrailFormData): Promise<void> {
         data.created_at,
     );
 }
+export async function getTrailById(id: number): Promise<Trail | undefined> {
+    const db = getDB();
+
+    return db.get<Trail>(
+        `
+    ${trailSelectWithRegion}
+    WHERE trails.id = ?
+    `,
+        id,
+    );
+}
+
+export async function updateTrail(
+    id: number,
+    data: TrailFormData,
+): Promise<boolean> {
+    const db = getDB();
+
+    const result = await db.run(
+        `
+    UPDATE trails
+    SET
+      title = ?,
+      slug = ?,
+      description = ?,
+      difficulty = ?,
+      distance_km = ?,
+      region_id = ?
+    WHERE id = ?
+    `,
+        data.title,
+        data.slug,
+        data.description,
+        data.difficulty,
+        data.distance_km,
+        data.region_id,
+        id,
+    );
+
+    return result.changes !== 0;
+}
