@@ -4,6 +4,7 @@ import path from "node:path";
 import { closeDB,  connectDB} from "./models/db.ts";
 import websiteRoutes from "./routes/websiteRoutes.ts";
 import { logger } from "./middleware/logger.ts"
+import adminRoutes from "./routes/adminRoutes.ts";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.set("view engine", "html");
 app.use(express.static(path.join(process.cwd(), "public")));
 app.use(logger);
 app.use("/", websiteRoutes);
+app.use("/admin", adminRoutes);
 
 async function startServer() {
     await connectDB();
