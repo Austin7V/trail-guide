@@ -1,7 +1,8 @@
-import express from "express";
+import express, {response} from "express";
 import nunjucks from "nunjucks";
 import path from "node:path";
 import { closeDB,  connectDB} from "./models/db.ts";
+import webseiteRoutes from "./routes/webseiteRoutes.ts";
 
 const app = express();
 
@@ -16,11 +17,7 @@ app.set("view engine", "html");
 
 app.use(express.static(path.join(process.cwd(), "public")));
 
-app.get("/", (_request, response) => {
-    response.render("index.html", {
-        title: "Trail Guide",
-    });
-});
+app.get("/", webseiteRoutes);
 
 async function startServer() {
     await connectDB();
