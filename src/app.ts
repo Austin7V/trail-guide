@@ -1,6 +1,7 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import path from "node:path";
+import { closeDB,  connectDB} from "./models/db.ts";
 
 const app = express();
 
@@ -21,6 +22,23 @@ app.get("/", (_request, response) => {
     });
 });
 
-app.listen(port, ()=> {
-    console.log(`Server running at http://localhost:${port}`);
+async function startServer() {
+    await connectDB();
+
+    app.listen(port, ()=> {
+        console.log(`Server running at http://localhost:${port}`);
+    });
+}
+
+async function shutdown() {
+    await closeDB();
+    process.exit(0);
+}
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
+
+startServer().catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exit(1);
 });
