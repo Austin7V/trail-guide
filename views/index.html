@@ -1,6 +1,13 @@
 {% extends "base.html" %}
+{% from "macros/trailCard.html" import trailCard %}
 
 {% block content %}
 <h1>Trail Guide</h1>
-<p> Die App läuft!</p>
+
+<p> Endecke wanderwege und ihre Region. </p>
+{% for trail in trails %}
+{{ trailCard(trail) }}
+{% else %}
+<p>Kein Trails gefunden.</p>
+{% endfor %}
 {% endblock content %}

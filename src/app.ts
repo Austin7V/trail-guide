@@ -2,7 +2,7 @@ import express, {response} from "express";
 import nunjucks from "nunjucks";
 import path from "node:path";
 import { closeDB,  connectDB} from "./models/db.ts";
-import webseiteRoutes from "./routes/webseiteRoutes.ts";
+import websiteRoutes from "./routes/websiteRoutes.ts";
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.set("view engine", "html");
 
 app.use(express.static(path.join(process.cwd(), "public")));
 
-app.get("/", webseiteRoutes);
+app.use("/", websiteRoutes);
 
 async function startServer() {
     await connectDB();

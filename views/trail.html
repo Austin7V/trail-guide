@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h1>{{ trail.title }}</h1>
+
+        <p>
+            <strong>{{ trail.difficulty }}</strong>
+            · {{ trail.distance_km }} km
+        </p>
+    </header>
+
+    <p>{{ trail.description }}</p>
+
+    <section>
+        <h2>Region</h2>
+        <p>
+            {{ trail.region_name }},
+            {{ trail.region_country }}
+        </p>
+    </section>
+
+    <footer>
+        <small>Erstellt am {{ trail.created_at }}</small>
+        <br />
+        <a href="/">Zurück zur Übersicht</a>
+    </footer>
+</article>
+{% endblock content %}
