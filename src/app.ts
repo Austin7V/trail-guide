@@ -22,6 +22,7 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use(logger);
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/", websiteRoutes);
 app.use("/admin", adminRoutes);
