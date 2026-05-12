@@ -2,8 +2,10 @@ import type { Request, Response } from "express";
 import sanitizeHtml from "sanitize-html";
 import { addTrail,
     getAllTrails,
+    getTrailById,
     getTrailBySlug,
 slugify,
+    updateTrail,
 } from "../models/trailModel.ts";
 
 const allowedHtmlOptions = {
@@ -67,3 +69,58 @@ export async function createTrailApi(request: Request, response: Response) {
     response.status(201).json(createdTrail);
 }
 
+export async function updateTrailApi(
+    request: Request<{ id: string }>,
+    response: Response,
+) {
+    const id = Number(request.params.id);
+    if (!Number.isInteger(id)) {
+        response.status(400).json({ error: "Invalid trail id" });
+        return;
+    }
+
+    const existingTrail = await getTrailById(id);
+    if (!existingTrail) {
+        response.status(404).json({ error: "Trail not found" });
+        return;
+    }
+
+    const { title, description, difficulty, distance_km, region_id } =
+        request.body;
+
+    const updatedTitle =
+        typeof title === "string" ? title.trim() : existingTrail.title;
+
+    const updatedDescription =
+        typeof description === "string"
+            ? sanitizeHtml(description, allowedHtmlOptions)
+            : existingTrail.description;
+
+    const updatedDifficulty =
+        typeof difficulty === "string" ? difficulty : existingTrail.difficulty;
+
+    const updatedDistanceKm =
+        typeof distance_km === "number" ? distance_km : existingTrail.distance_km;
+
+    const updatedRegionId =
+        typeof region_id === "number" ? region_id : existingTrail.region_id;
+
+    const updatedTrail = {
+        title: updatedTitle,
+        slug: slugify(updatedTitle),
+        description: updatedDescription,
+        difficulty: updatedDifficulty,
+        distance_km: updatedDistanceKm,
+        region_id: updatedRegionId,
+    };
+
+    const wasUpdated = await updateTrail(id, updatedTrail);
+    if (!wasUpdated) {
+        response.status(404).json({ error: "Trail not found" });
+        return;
+    }
+
+    const savedTrail = await getTrailById(id);
+
+    response.status(200).json(savedTrail);
+}

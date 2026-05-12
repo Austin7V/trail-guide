@@ -66,6 +66,15 @@ export interface TrailFormData {
     created_at: string;
 }
 
+export interface TrailUpdateData {
+    title: string;
+    slug: string;
+    description: string;
+    difficulty: string;
+    distance_km: number;
+    region_id: number;
+}
+
 export function slugify(title: string): string {
     return title
         .toLowerCase()
@@ -113,7 +122,7 @@ export async function getTrailById(id: number): Promise<Trail | undefined> {
 
 export async function updateTrail(
     id: number,
-    data: TrailFormData,
+    data: TrailUpdateData,
 ): Promise<boolean> {
     const db = getDB();
 

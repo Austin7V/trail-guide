@@ -4,6 +4,7 @@ import {
     createTrailApi,
     getTrailBySlugApi,
     getTrailsApi,
+    updateTrailApi,
 } from "../controllers/apiTrailController.ts";
 import {
     getRegionsApi,
@@ -19,5 +20,6 @@ router.get("/regions", getRegionsApi);
 router.get("/regions/:slug/trails", getRegionTrailsApi);
 
 router.post("/trails", requireApiKey, createTrailApi);
+router.patch("/trails/:id", requireApiKey, updateTrailApi);
 
 export default router;
