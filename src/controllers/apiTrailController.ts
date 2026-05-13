@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
 import sanitizeHtml from "sanitize-html";
 import { addTrail,
-    getAllTrails,
-    getTrailById,
-    getTrailBySlug,
-slugify,
-    updateTrail,
+        deleteTrail,
+        getAllTrails,
+        getTrailById,
+        getTrailBySlug,
+        slugify,
+        updateTrail,
 } from "../models/trailModel.ts";
 
 const allowedHtmlOptions = {
@@ -123,4 +124,21 @@ export async function updateTrailApi(
     const savedTrail = await getTrailById(id);
 
     response.status(200).json(savedTrail);
+}
+
+export async function deleteTrailApi(
+    request: Request<{ id: string}>,
+    response: Response,
+) {
+    const id = Number(request.params.id);
+    if ( !Number.isInteger(id)) {
+        response.status(400).json({ error: "Invalid trail id"});
+        return;
+    }
+    const wasDeleted = await deleteTrail(id);
+    if (!wasDeleted) {
+        response.status(404).json({ error: "Trail not found"});
+        return;
+    }
+    response.status(204).send();
 }
