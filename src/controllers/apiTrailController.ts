@@ -5,9 +5,11 @@ import { addTrail,
         getAllTrails,
         getTrailById,
         getTrailBySlug,
+        getTrailsByRegionId,
         slugify,
         updateTrail,
 } from "../models/trailModel.ts";
+import { getRegionBySlug } from "../models/regionModel.ts";
 
 const allowedHtmlOptions = {
     allowedTags: ["p", "br", "strong", "em", "ul", "ol", "li", "a"],
@@ -16,10 +18,34 @@ const allowedHtmlOptions = {
     },
 };
 
-export async function getTrailsApi(_request: Request, response: Response) {
-    const trails = await getAllTrails();
+export async function getTrailsApi(request: Request, response: Response) {
+    const { region, difficulty } = request.query;
+    if (difficulty !== undefined && typeof difficulty !== "string") {
+        response.status(400).json({ error: "Invalid difficulty filter" });
+        return;
+    }
+    if (region !== undefined && typeof region !== "string") {
+        response.status(400).json({ error: "Invalid region filter" });
+        return;
+    }
+    let trails;
 
-    response.status(200).json(trails);
+    if (region) {
+        const foundRegion = await getRegionBySlug(region);
+        if (!foundRegion) {
+            response.status(404).json({ error: "Region not found" });
+            return;
+        }
+        trails = await getTrailsByRegionId(foundRegion.id);
+    } else {
+        trails = await getAllTrails();
+    }
+
+    const filteredTrails = difficulty
+        ? trails.filter((trail) => trail.difficulty === difficulty)
+        : trails;
+
+    response.status(200).json(filteredTrails);
 }
 
 export async function getTrailBySlugApi(
